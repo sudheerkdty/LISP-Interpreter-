@@ -1,0 +1,48 @@
+function tokenize(chars){
+	var newchar = chars.replace(/\(/g,'( ').replace(/\)/g,' )')
+	return newchar.split(/ +/);
+};
+
+function read_from_token(tokens){
+	if (tokens.length == 0){
+		throw "Unexpected EOF";
+	}	
+	console.log("tokens"+ tokens);	
+	if (tokens[0] == '('){
+		var L = [];
+		if (tokens[tokens.length -1] == ')' ){
+			for(var token in tokens.slice(1,tokens.length-1)){
+				L.push(atom(token));
+			}
+		}
+		else{
+			console.log("else" + token);
+			return atom(tokens[0]);
+		}
+	}
+	return L;
+};
+
+function atom(token){
+	try{
+		return parseInt(token);
+		}
+	catch(e){
+		try{
+			console.log("parseFloat"+parseFloat(token))	;
+			return parseFloat(token);
+			}
+		catch(ee){
+			console.log("string"+String(token));
+			return String(token);
+			}
+		}
+		throw "Error" + e + "\n" +ee;
+};
+function parse(program){
+	return read_from_token(tokenize(program));
+	}
+console.log(parse("(+ 1 (23) 45)"));
+
+
+
