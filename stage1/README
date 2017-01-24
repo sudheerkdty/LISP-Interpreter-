@@ -1,5 +1,0 @@
-
-tokenize, parse and evaluate nested lisp expressions
-composed of integers/floating point numbers and standard
-arithmetic operators.
-
