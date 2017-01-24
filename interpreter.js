@@ -22,40 +22,35 @@ global_env = {'+': add,'-': sub, '*': mul, '/' : div};
 function eval(x, env ){
     env = env || global_env;
     if (typeof(x) == 'string'){
-        //console.log("x is "+ x);
         return env[x];
     }
     else if (!(x instanceof Array)){
-        //console.log("constants"+ x);
         return x;
     }
+    else if (x[0] == 'define'){
+        variable = x[1];
+        exp = x[2];
+        env[variable] = eval(exp, env);
+    }
     else{
-        //console.log("operator"+ x[0]);
-        var  proc =eval(x[0],env);//x[0], env);
-        //console.log("x="+x);//typeof(proc));
+        var  proc =eval(x[0],env);
         var args = [];
         xnew = x.slice(1);
         for (var i in xnew){
-            //console.log("x(i):"+typeof(xnew[i]));
             args.push(eval(xnew[i], env));
         }
-        //console.log("args:"+args);
-        //console.log("type of proc:"+typeof(proc));
         return proc.apply(this,args);
     }
 }
-console.log(eval('x'));
 function tokenize(chars){
     var newchar = chars.replace(/\(/g,'( ').replace(/\)/g,' )')
     return newchar.split(/ +/).slice(0,newchar.length);
 };
 function read_from_tokens(tokens){
     var len = tokens.length;
-    //console.log("tokens.length = "+ len);
     if (tokens.length == 0){
         throw "Unexpected EOF";
     }
-    //console.log("tokens"+ tokens);
     var token = tokens.shift(0);
     if ('(' == token){
         var L = [];
@@ -69,7 +64,6 @@ function read_from_tokens(tokens){
         throw "unexpected )";
         }
     else{
-        //console.log("else" + tokens);
         return atom(token);
         }
 
@@ -91,6 +85,10 @@ function parse(program){
     }
 
 console.log("Eval************");
-console.log(eval(parse("(+ 2 (* 3 4))")));
-console.log(eval(parse("(+ 2 (* 3 (- 5 3)))")));
-console.log(eval(parse("4")));
+pgm1 = '(define x 10)';
+eval(parse(pgm1));
+pgm2 = '(define y (* 3 4))';
+eval(parse(pgm2));
+pgm3 = '(+ x y)'
+console.log(pgm1+"\n"+pgm2+"\n"+pgm3);
+console.log(eval(parse(pgm3)));
